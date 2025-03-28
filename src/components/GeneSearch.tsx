@@ -46,14 +46,14 @@ const GeneSearch: React.FC<GeneSearchProps> = ({ onSearch }) => {
       </form>
       
       <div className="mt-3 flex flex-wrap gap-2">
-        <span className="text-sm text-muted-foreground mr-2">Recent searches:</span>
+        <span className="text-sm text-muted-foreground mr-2">Popular genes:</span>
         {recentSearches.map((gene) => (
           <Button 
             key={gene} 
             variant="outline" 
             size="sm" 
             onClick={() => handleRecentSearch(gene)}
-            className="text-xs"
+            className="text-xs hover:bg-primary hover:text-primary-foreground transition-colors"
           >
             {gene}
           </Button>

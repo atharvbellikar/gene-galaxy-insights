@@ -54,6 +54,11 @@ const Index = () => {
     setSelectedGene(geneId);
   };
 
+  const handleBackToHome = () => {
+    setSelectedGene(null);
+    setGeneData(null);
+  };
+
   return (
     <div className="min-h-screen flex flex-col">
       <Header toggleTheme={toggleTheme} isDarkMode={theme === 'dark'} />
@@ -65,7 +70,7 @@ const Index = () => {
             Explore genes with AI-powered insights and interactive visualizations
           </p>
           <Separator className="my-4" />
-          <GeneSearch onSearch={handleSearch} />
+          {!selectedGene && <GeneSearch onSearch={handleSearch} />}
         </section>
         
         {loading ? (
@@ -84,7 +89,7 @@ const Index = () => {
           <>
             {geneData && (
               <div className="space-y-6">
-                <GeneDetails gene={geneData} />
+                <GeneDetails gene={geneData} onBackToHome={handleBackToHome} />
                 <GenomeBrowser geneId={selectedGene} />
                 <EvolutionaryTimeline geneId={selectedGene} />
               </div>
