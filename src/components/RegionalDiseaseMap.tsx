@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -9,7 +8,6 @@ import { Badge } from "@/components/ui/badge";
 import { MapPin, Search, Info } from 'lucide-react';
 import { toast } from 'sonner';
 
-// Mock data for region-specific genetic diseases
 const regionalGeneticData: Record<string, Array<{
   disease: string;
   prevalence: string;
@@ -229,7 +227,7 @@ const RegionalDiseaseMap: React.FC = () => {
                         <TableCell>
                           <Badge variant={
                             result.prevalence.toLowerCase().includes('high') ? 'destructive' : 
-                            result.prevalence.toLowerCase().includes('moderate') ? 'warning' : 
+                            result.prevalence.toLowerCase().includes('moderate') ? 'secondary' : 
                             'outline'
                           }>
                             {result.prevalence}
