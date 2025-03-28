@@ -28,9 +28,7 @@ const GeneDetails: React.FC<GeneDetailsProps> = ({ gene, onBackToHome }) => {
             </Button>
           )}
           <h2 className="text-2xl font-bold">{gene.symbol}</h2>
-          <Badge variant="outline" className="text-xs font-normal">
-            {gene.type}
-          </Badge>
+          {/* Removed the type badge since it doesn't exist in the Gene interface */}
         </div>
       </div>
       
@@ -55,7 +53,14 @@ const GeneDetails: React.FC<GeneDetailsProps> = ({ gene, onBackToHome }) => {
               <Activity className="h-5 w-5 text-primary mt-0.5 flex-shrink-0" />
               <div>
                 <h3 className="font-medium">Expression</h3>
-                <p className="text-sm text-muted-foreground">{gene.expression}</p>
+                <p className="text-sm text-muted-foreground">
+                  {gene.expression.map((exp, index) => (
+                    <span key={exp.tissue}>
+                      {exp.tissue} ({exp.level}%)
+                      {index < gene.expression.length - 1 ? ', ' : ''}
+                    </span>
+                  ))}
+                </p>
               </div>
             </div>
           </div>
@@ -65,7 +70,14 @@ const GeneDetails: React.FC<GeneDetailsProps> = ({ gene, onBackToHome }) => {
               <AlertCircle className="h-5 w-5 text-primary mt-0.5 flex-shrink-0" />
               <div>
                 <h3 className="font-medium">Associated Conditions</h3>
-                <p className="text-sm text-muted-foreground">{gene.diseases}</p>
+                <p className="text-sm text-muted-foreground">
+                  {gene.diseases.map((disease, index) => (
+                    <span key={disease.omimId}>
+                      {disease.name} (OMIM: {disease.omimId})
+                      {index < gene.diseases.length - 1 ? ', ' : ''}
+                    </span>
+                  ))}
+                </p>
               </div>
             </div>
           </div>
