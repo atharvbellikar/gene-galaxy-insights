@@ -3,9 +3,24 @@ import React, { useState, useRef, useEffect } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { ZoomIn, ZoomOut, MoveHorizontal, Upload, Download } from "lucide-react";
+import { ZoomIn, ZoomOut, MoveHorizontal, Upload, Download, Info } from "lucide-react";
 import { Slider } from "@/components/ui/slider";
 import { toast } from "sonner";
+import { 
+  Tooltip, 
+  TooltipContent, 
+  TooltipTrigger 
+} from "@/components/ui/tooltip";
+import { 
+  HoverCard, 
+  HoverCardContent, 
+  HoverCardTrigger 
+} from "@/components/ui/hover-card";
+import { 
+  Popover, 
+  PopoverContent, 
+  PopoverTrigger 
+} from "@/components/ui/popover";
 
 interface GenomeBrowserProps {
   geneId: string | null;
@@ -206,78 +221,168 @@ const GenomeBrowser: React.FC<GenomeBrowserProps> = ({ geneId }) => {
         <div className="flex justify-between items-center">
           <CardTitle>Interactive Genome Browser</CardTitle>
           <div className="flex items-center gap-2">
-            <Button variant="outline" size="sm" onClick={handleUploadTrack} title="Upload custom track">
-              <Upload className="h-4 w-4 mr-1" />
-              <span className="hidden sm:inline">Upload</span>
-            </Button>
-            <Button variant="outline" size="sm" onClick={handleDownloadData} title="Download data">
-              <Download className="h-4 w-4 mr-1" />
-              <span className="hidden sm:inline">Export</span>
-            </Button>
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <Button variant="outline" size="sm" onClick={handleUploadTrack} className="text-foreground">
+                  <Upload className="h-4 w-4 mr-1" />
+                  <span className="hidden sm:inline">Upload</span>
+                </Button>
+              </TooltipTrigger>
+              <TooltipContent>
+                Upload custom genomic tracks
+              </TooltipContent>
+            </Tooltip>
+            
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <Button variant="outline" size="sm" onClick={handleDownloadData} className="text-foreground">
+                  <Download className="h-4 w-4 mr-1" />
+                  <span className="hidden sm:inline">Export</span>
+                </Button>
+              </TooltipTrigger>
+              <TooltipContent>
+                Export current view as image or data
+              </TooltipContent>
+            </Tooltip>
           </div>
         </div>
       </CardHeader>
       <CardContent>
         <div className="flex items-center justify-between mb-4">
+          <HoverCard>
+            <HoverCardTrigger asChild>
+              <div className="flex items-center gap-1 cursor-help">
+                <Badge variant="outline" className="bg-background">
+                  {Math.floor(visibleRange.start).toLocaleString()} - {Math.floor(visibleRange.end).toLocaleString()} bp
+                </Badge>
+                <Badge variant="outline" className="bg-background">
+                  Scale: {scale.toFixed(1)}x
+                </Badge>
+                <Info className="h-4 w-4 text-muted-foreground ml-1" />
+              </div>
+            </HoverCardTrigger>
+            <HoverCardContent className="w-80">
+              <div className="space-y-2">
+                <h4 className="font-medium">Genome Browser Navigation</h4>
+                <p className="text-sm text-muted-foreground">
+                  <span className="font-medium">Position:</span> {Math.floor(visibleRange.start).toLocaleString()} - {Math.floor(visibleRange.end).toLocaleString()} base pairs
+                </p>
+                <p className="text-sm text-muted-foreground">
+                  <span className="font-medium">Scale:</span> {scale.toFixed(1)}x zoom level
+                </p>
+                <p className="text-sm text-muted-foreground">
+                  Use zoom buttons or click and drag to navigate the sequence.
+                </p>
+              </div>
+            </HoverCardContent>
+          </HoverCard>
+          
           <div className="flex items-center gap-1">
-            <Badge variant="outline" className="bg-background">
-              {Math.floor(visibleRange.start).toLocaleString()} - {Math.floor(visibleRange.end).toLocaleString()} bp
-            </Badge>
-            <Badge variant="outline" className="bg-background">
-              Scale: {scale.toFixed(1)}x
-            </Badge>
-          </div>
-          <div className="flex items-center gap-1">
-            <Button 
-              variant="outline" 
-              size="icon" 
-              onClick={handleZoomOut}
-              disabled={scale <= 0.2}
-              title="Zoom out"
-            >
-              <ZoomOut className="h-4 w-4" />
-            </Button>
-            <Button 
-              variant="outline" 
-              size="icon"
-              onClick={handleZoomIn}
-              disabled={scale >= 5}
-              title="Zoom in"
-            >
-              <ZoomIn className="h-4 w-4" />
-            </Button>
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <Button 
+                  variant="outline" 
+                  size="icon" 
+                  onClick={handleZoomOut}
+                  disabled={scale <= 0.2}
+                  className="text-foreground"
+                >
+                  <ZoomOut className="h-4 w-4" />
+                </Button>
+              </TooltipTrigger>
+              <TooltipContent>Zoom out</TooltipContent>
+            </Tooltip>
+            
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <Button 
+                  variant="outline" 
+                  size="icon"
+                  onClick={handleZoomIn}
+                  disabled={scale >= 5}
+                  className="text-foreground"
+                >
+                  <ZoomIn className="h-4 w-4" />
+                </Button>
+              </TooltipTrigger>
+              <TooltipContent>Zoom in</TooltipContent>
+            </Tooltip>
           </div>
         </div>
         
         <div className="mb-4">
-          <Slider 
-            defaultValue={[50]} 
-            value={[sliderPosition]} 
-            max={100} 
-            step={0.1} 
-            onValueChange={handleSliderChange}
-          />
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <div>
+                <Slider 
+                  defaultValue={[50]} 
+                  value={[sliderPosition]} 
+                  max={100} 
+                  step={0.1} 
+                  onValueChange={handleSliderChange}
+                />
+              </div>
+            </TooltipTrigger>
+            <TooltipContent>
+              Slide to navigate through the genome sequence
+            </TooltipContent>
+          </Tooltip>
         </div>
         
         <div
           ref={viewportRef}
-          className="relative h-auto border rounded-md overflow-hidden bg-gray-50 cursor-grab"
+          className="relative h-auto border rounded-md overflow-hidden bg-background/5 cursor-grab dark:bg-slate-900 dark:border-slate-800 group"
           onMouseDown={handleMouseDown}
           onMouseMove={handleMouseMove}
           onMouseUp={handleMouseUp}
           onMouseLeave={handleMouseLeave}
         >
-          <div className="p-2 bg-muted/50 border-b flex items-center">
-            <MoveHorizontal className="h-4 w-4 mr-2 text-muted-foreground" />
-            <span className="text-sm text-muted-foreground">Click and drag to pan</span>
+          <Popover>
+            <PopoverTrigger asChild>
+              <div className="p-3 bg-muted/50 dark:bg-slate-800/70 border-b flex items-center justify-between text-foreground">
+                <div className="flex items-center">
+                  <MoveHorizontal className="h-4 w-4 mr-2 text-primary" />
+                  <span className="text-sm font-medium">Click and drag to pan genomic view</span>
+                </div>
+                <Button variant="ghost" size="icon" className="h-6 w-6 rounded-full">
+                  <Info className="h-3.5 w-3.5 text-muted-foreground" />
+                </Button>
+              </div>
+            </PopoverTrigger>
+            <PopoverContent className="w-80">
+              <div className="space-y-2">
+                <h4 className="font-medium">Navigation Instructions</h4>
+                <ul className="list-disc pl-5 text-sm text-muted-foreground space-y-1">
+                  <li>Click and hold to drag the genomic view left or right</li>
+                  <li>Use the zoom buttons to increase or decrease detail</li>
+                  <li>The slider allows quick navigation to different regions</li>
+                  <li>Hover over features to see detailed information</li>
+                </ul>
+              </div>
+            </PopoverContent>
+          </Popover>
+          
+          <div className="p-1 bg-muted/30 dark:bg-slate-800/30 border-b flex flex-wrap gap-2 text-xs">
+            <div className="flex items-center px-2 py-1 rounded-full bg-primary/10 text-primary-foreground">
+              <span className="h-3 w-3 rounded-full bg-genome-primary mr-1"></span>
+              <span>Exons</span>
+            </div>
+            <div className="flex items-center px-2 py-1 rounded-full bg-muted/50 text-foreground">
+              <span className="h-0.5 w-3 bg-gray-400 mr-1"></span>
+              <span>Introns</span>
+            </div>
+            <div className="flex items-center px-2 py-1 rounded-full bg-red-500/10 text-foreground">
+              <span className="h-2 w-2 rounded-full bg-red-500 mr-1"></span>
+              <span>Variants</span>
+            </div>
           </div>
           
           {tracks.map((track) => (
             <div key={track.id} className="p-2">
               <div className="flex justify-between mb-1">
-                <span className="text-sm font-medium">{track.name}</span>
+                <span className="text-sm font-medium text-foreground">{track.name}</span>
               </div>
-              <div className="genome-track">
+              <div className="genome-track dark:bg-slate-800">
                 {track.features.map((feature, index) => {
                   if (feature.start > visibleRange.end || feature.end < visibleRange.start) {
                     return null;
@@ -288,31 +393,49 @@ const GenomeBrowser: React.FC<GenomeBrowserProps> = ({ geneId }) => {
                   if (feature.type === 'exon') {
                     const width = positionToPixel(Math.min(feature.end, visibleRange.end), visibleRange) - left;
                     return (
-                      <div 
-                        key={`${track.id}-${index}`}
-                        className="genome-exon"
-                        style={{ left: `${left}px`, width: `${Math.max(1, width)}px` }}
-                        title={`Exon: ${feature.start}-${feature.end}`}
-                      />
+                      <Tooltip key={`${track.id}-${index}`}>
+                        <TooltipTrigger asChild>
+                          <div 
+                            className="genome-exon dark:bg-indigo-500"
+                            style={{ left: `${left}px`, width: `${Math.max(1, width)}px` }}
+                          />
+                        </TooltipTrigger>
+                        <TooltipContent>
+                          <p>Exon: {feature.start.toLocaleString()}-{feature.end.toLocaleString()}</p>
+                          <p className="text-xs text-muted-foreground">Length: {(feature.end - feature.start).toLocaleString()} bp</p>
+                        </TooltipContent>
+                      </Tooltip>
                     );
                   } else if (feature.type === 'intron') {
                     const width = positionToPixel(Math.min(feature.end, visibleRange.end), visibleRange) - left;
                     return (
-                      <div 
-                        key={`${track.id}-${index}`}
-                        className="genome-intron"
-                        style={{ left: `${left}px`, width: `${Math.max(1, width)}px` }}
-                        title={`Intron: ${feature.start}-${feature.end}`}
-                      />
+                      <Tooltip key={`${track.id}-${index}`}>
+                        <TooltipTrigger asChild>
+                          <div 
+                            className="genome-intron dark:bg-gray-500"
+                            style={{ left: `${left}px`, width: `${Math.max(1, width)}px` }}
+                          />
+                        </TooltipTrigger>
+                        <TooltipContent>
+                          <p>Intron: {feature.start.toLocaleString()}-{feature.end.toLocaleString()}</p>
+                          <p className="text-xs text-muted-foreground">Length: {(feature.end - feature.start).toLocaleString()} bp</p>
+                        </TooltipContent>
+                      </Tooltip>
                     );
                   } else if (feature.type === 'variant') {
                     return (
-                      <div 
-                        key={`${track.id}-${index}`}
-                        className="genome-variant"
-                        style={{ left: `${left}px` }}
-                        title={`${feature.variantType}: ${feature.id} at position ${feature.start}`}
-                      />
+                      <Tooltip key={`${track.id}-${index}`}>
+                        <TooltipTrigger asChild>
+                          <div 
+                            className="genome-variant dark:bg-red-500"
+                            style={{ left: `${left}px` }}
+                          />
+                        </TooltipTrigger>
+                        <TooltipContent>
+                          <p>{feature.variantType}: {feature.id}</p>
+                          <p className="text-xs text-muted-foreground">Position: {feature.start.toLocaleString()}</p>
+                        </TooltipContent>
+                      </Tooltip>
                     );
                   }
                   return null;
