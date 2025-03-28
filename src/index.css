@@ -43,6 +43,10 @@
     --sidebar-accent-foreground: 240 5.9% 10%;
     --sidebar-border: 220 13% 91%;
     --sidebar-ring: 217.2 91.2% 59.8%;
+    
+    --genome-primary: 252 62% 55%;
+    --genome-secondary: 270 30% 54%;
+    --genome-variant: 0 84.2% 60.2%;
   }
 
   .dark {
@@ -82,6 +86,10 @@
     --sidebar-accent-foreground: 240 4.8% 95.9%;
     --sidebar-border: 240 3.7% 15.9%;
     --sidebar-ring: 217.2 91.2% 59.8%;
+    
+    --genome-primary: 252 62% 55%;
+    --genome-secondary: 270 30% 54%;
+    --genome-variant: 0 84.2% 60.2%;
   }
 }
 
@@ -111,6 +119,7 @@
     position: absolute;
     top: 12px;
     border-radius: 4px;
+    transition: all 0.2s ease;
   }
   
   .genome-intron {
@@ -118,6 +127,7 @@
     background-color: #94a3b8;
     position: absolute;
     top: 19px;
+    transition: all 0.2s ease;
   }
 
   .genome-variant {
@@ -129,5 +139,48 @@
     top: 16px;
     transform: translateX(-4px);
     cursor: pointer;
+    transition: all 0.2s ease;
+  }
+  
+  /* 3D visualization animations */
+  .animate-fade-in {
+    animation: fadeIn 0.3s ease-in-out;
+  }
+  
+  .animate-zoom-in {
+    animation: zoomIn 0.3s ease-out;
+  }
+  
+  .animate-rotate {
+    animation: rotate 20s linear infinite;
+  }
+  
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+  
+  @keyframes zoomIn {
+    from {
+      transform: scale(0.8);
+      opacity: 0;
+    }
+    to {
+      transform: scale(1);
+      opacity: 1;
+    }
+  }
+  
+  @keyframes rotate {
+    from {
+      transform: rotateY(0deg);
+    }
+    to {
+      transform: rotateY(360deg);
+    }
   }
 }
