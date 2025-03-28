@@ -6,6 +6,7 @@ import GeneSearch from '@/components/GeneSearch';
 import GeneDetails from '@/components/GeneDetails';
 import GenomeBrowser from '@/components/GenomeBrowser';
 import EvolutionaryTimeline from '@/components/EvolutionaryTimeline';
+import RegionalDiseaseMap from '@/components/RegionalDiseaseMap';
 import { getGeneById, type Gene } from '@/services/geneService';
 import { Separator } from '@/components/ui/separator';
 import { Skeleton } from '@/components/ui/skeleton';
@@ -96,15 +97,20 @@ const Index = () => {
             )}
             
             {!selectedGene && (
-              <div className="flex flex-col items-center justify-center py-12 text-center">
-                <Dna className="h-16 w-16 mb-4 text-genome-primary animate-pulse" />
-                <h2 className="text-2xl font-medium mb-3">Welcome to Gene Galaxy Insights</h2>
-                <p className="text-muted-foreground max-w-2xl">
-                  Search for a gene to explore its function, associated diseases, expression patterns, 
-                  and evolutionary conservation. Our AI-powered platform provides comprehensive insights 
-                  to help you understand the biological significance of genes.
-                </p>
-              </div>
+              <>
+                <div className="flex flex-col items-center justify-center py-8 text-center mb-8">
+                  <Dna className="h-16 w-16 mb-4 text-genome-primary animate-pulse" />
+                  <h2 className="text-2xl font-medium mb-3">Welcome to Gene Galaxy Insights</h2>
+                  <p className="text-muted-foreground max-w-2xl">
+                    Search for a gene to explore its function, associated diseases, expression patterns, 
+                    and evolutionary conservation. Our AI-powered platform provides comprehensive insights 
+                    to help you understand the biological significance of genes.
+                  </p>
+                </div>
+                
+                {/* Add the Regional Disease Map component */}
+                <RegionalDiseaseMap />
+              </>
             )}
           </>
         )}
