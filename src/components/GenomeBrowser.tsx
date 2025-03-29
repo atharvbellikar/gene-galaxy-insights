@@ -1,9 +1,8 @@
-
 import React, { useState, useRef, useEffect } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { ZoomIn, ZoomOut, MoveHorizontal, Upload, Download, Info, View3d, Layers } from "lucide-react";
+import { ZoomIn, ZoomOut, MoveHorizontal, Upload, Download, Info, Layers, CubeIcon } from "lucide-react";
 import { Slider } from "@/components/ui/slider";
 import { toast } from "sonner";
 import { 
@@ -55,11 +54,10 @@ const GenomeBrowser: React.FC<GenomeBrowserProps> = ({ geneId }) => {
 
   useEffect(() => {
     if (geneId) {
-      // In a real app, this would be an API call to get the gene data
       const mockGeneData = generateMockGeneData(geneId);
       setTracks(mockGeneData.tracks);
       setTotalLength(mockGeneData.totalLength);
-      setPosition(mockGeneData.totalLength * 0.3); // Start at 30% position
+      setPosition(mockGeneData.totalLength * 0.3);
     } else {
       setTracks([]);
     }
@@ -80,7 +78,6 @@ const GenomeBrowser: React.FC<GenomeBrowserProps> = ({ geneId }) => {
   }, []);
 
   const generateMockGeneData = (geneId: string) => {
-    // This would normally be fetched from a genomic database
     const totalLength = 100000;
     const exonCount = Math.floor(Math.random() * 10) + 5;
     const exons = [];
@@ -159,7 +156,6 @@ const GenomeBrowser: React.FC<GenomeBrowserProps> = ({ geneId }) => {
     const dx = e.clientX - lastMouseX.current;
     lastMouseX.current = e.clientX;
     
-    // Update position based on dx, scale and viewport width
     const delta = (dx / viewportWidth) * (totalLength / scale);
     setPosition(prev => Math.max(0, Math.min(totalLength, prev - delta)));
   };
@@ -208,7 +204,6 @@ const GenomeBrowser: React.FC<GenomeBrowserProps> = ({ geneId }) => {
   const toggle3DView = () => {
     setIs3DTransitioning(true);
     
-    // Animate the transition
     setTimeout(() => {
       setShow3DView(prev => !prev);
       setIs3DTransitioning(false);
@@ -260,7 +255,7 @@ const GenomeBrowser: React.FC<GenomeBrowserProps> = ({ geneId }) => {
                   onClick={toggle3DView} 
                   className={`text-foreground transition-all ${show3DView ? "bg-primary text-primary-foreground" : ""}`}
                 >
-                  <View3d className="h-4 w-4 mr-1" />
+                  <CubeIcon className="h-4 w-4 mr-1" />
                   <span className="hidden sm:inline">3D View</span>
                 </Button>
               </TooltipTrigger>
@@ -526,7 +521,6 @@ const GenomeBrowser: React.FC<GenomeBrowserProps> = ({ geneId }) => {
                   </div>
                 ))}
                 
-                {/* Highlighted feature details panel */}
                 {highlightedFeature && !show3DView && (
                   <div className="absolute right-2 top-20 bg-card dark:bg-slate-800/95 border rounded-md p-3 shadow-lg w-64 animate-fade-in">
                     <div className="flex justify-between items-center mb-2">
